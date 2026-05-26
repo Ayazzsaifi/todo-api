@@ -13,9 +13,29 @@ app.post('/users',function(req,res){
     let id =Math.floor(Math.random()*1000);
     let name=req.body.name;
     let age=req.body.age;
-    users.push({name:name,age:age,id:id});
+    let pass=req.body.pass
+    users.push({name:name,age:age,id:id,pass:pass});
     fs.writeFileSync('users.json',JSON.stringify(users));
     res.json({message: "user added!",user:{name,age}});
+
+});
+
+app.post('/login',function(req,res){
+    let user=users.find(function(user){
+        return user.name== req.body.name
+    });
+
+    if(!user){
+        return res.json({err:"username not found"});
+    }
+    if(user.pass!==req.body.pass){
+        res.json({err:"passsword is incorrect"});
+    }
+
+    else{
+        res.json({message:"Sucessfully Login"});
+    }
+
 
 });
 
